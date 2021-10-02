@@ -1,13 +1,16 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import {Home} from './Pages';
 import {ChakraProvider} from '@chakra-ui/react';
+import {DndProvider} from 'react-dnd';
 
-function App() {
+import {HTML5Backend} from 'react-dnd-html5-backend';
+
+function App(): JSX.Element {
   return (
-    <ChakraProvider>
-      <Home />
-    </ChakraProvider>
+    <DndProvider backend={HTML5Backend}>
+      <ChakraProvider>
+        <Home />
+      </ChakraProvider>
+    </DndProvider>
   );
 }
 

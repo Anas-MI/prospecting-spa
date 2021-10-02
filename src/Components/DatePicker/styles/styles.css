@@ -1,0 +1,49 @@
+.DatePickerContainer {
+  background: #ffffff;
+  border: 1px solid #cfd0e8;
+  box-sizing: border-box;
+  border-radius: 19px;
+  padding: 16px 21px;
+  margin-bottom: 15px;
+}
+.DatePickerHeadline {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 24px;
+  user-select: none;
+
+  /* identical to box height, or 171% */
+  text-align: center;
+  margin: 6px 33.5;
+  /* C */
+  color: #191c2c;
+}
+
+.DateDivider {
+  border-bottom: 1px solid #c8c9e4;
+  width: 100%;
+}
+.DisplayNumber {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  margin: 6px 33.5px;
+  user-select: none;
+}
+.HandleNumber {
+  flex-direction: column;
+  height: 220px;
+  overflow: auto;
+  cursor: pointer;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.HandleNumber::-webkit-scrollbar {
+  display: none;
+}

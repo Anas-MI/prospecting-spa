@@ -1,47 +1,152 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition */
+/* eslint-disable no-use-before-define */
 /* eslint-disable node/no-extraneous-import */
-import {FC} from 'react';
+import React, {useContext, FC, Suspense} from 'react';
 import './styles/styles.css';
 import {Flex, Text} from '@chakra-ui/layout';
 
-import dotsImage from '../../assets/dotsOnPage.svg';
+const QuestionType = React.lazy(async () => import('./QuestionType'));
+
+import {StateContext} from '../../Context';
 import arrowIcon from '../../assets/arrow.svg';
 import {CircularProgress, CircularProgressLabel} from '@chakra-ui/progress';
 import {Image} from '@chakra-ui/image';
-import QuestionType from './QuestionType';
+import {Spinner} from '@chakra-ui/spinner';
+import {isUndefined} from 'lodash';
 type Props = {
   data: {
-    id: number;
-    questionDescription: string;
-    questionText: string;
-    type: {
-      id: number;
-      type: string;
-      options?: string[];
+    preface: string;
+    body: string;
+    context: {
+      above: string;
+      center: string;
+      below: {
+        body: string;
+        icon: string;
+      };
     };
-    graphic?: string;
-    dotsOnPage: number;
+    elements: {
+      question_type: string;
+      question_override: {
+        preface: string;
+        body: string;
+      };
+      context: {
+        help_text: string;
+        left: {
+          icon: {
+            above: string;
+            center: string;
+            below: string;
+          };
+          text: {
+            above: string;
+            center: string;
+            below: string;
+          };
+          subtext: {
+            above: string;
+            center: string;
+            below: string;
+          };
+          value: string;
+        };
+        right: {
+          icon: {
+            above: string;
+            center: string;
+            below: string;
+          };
+          text: {
+            above: string;
+            center: string;
+            below: string;
+          };
+          subtext: {
+            above: string;
+            center: string;
+            below: string;
+          };
+          value: string;
+        };
+        slider?: {
+          default: string;
+          min: string;
+          max: string;
+          step: string;
+          ticks: boolean;
+        };
+        input: {
+          body: string;
+          placeholder: string;
+          values: string[];
+        };
+        radio: string[];
+        multicard: string[][];
+        dragdrop: string[][];
+      };
+    }[];
+
+    icon?: string;
+    icon1?: string;
+    icon2?: string;
+    dimensions?: string[];
+  };
+  progressData: {
+    counter: number;
+    total: number;
+    heading: string;
   };
   handleNext: () => void;
   handlePrev: () => void;
 };
 
-const QuestionContainer: FC<Props> = ({data, handleNext, handlePrev}) => {
+const percentageConstant = 100;
+
+const QuestionContainer: FC<Props> = ({
+  data,
+  handleNext,
+  handlePrev,
+  progressData,
+}) => {
+  const valueFromContext = useContext(StateContext);
+  const disabled = isUndefined(
+    valueFromContext?.answers[valueFromContext.section][
+      valueFromContext.counter
+    ]
+  )
+    ? true
+    : false;
+  console.log(
+    valueFromContext?.answers[valueFromContext.section][
+      valueFromContext.counter
+    ]
+  );
   return (
     <Flex className="MainContainer">
-      <Flex alignItems="center" justifyContent="center" marginBottom="40px">
+      <Flex alignItems="center" justifyContent="center" marginBottom="32px">
         <Flex alignItems="center" justifyContent="center" marginRight="10px">
-          <CircularProgress value={40} color="#775ef0">
+          <CircularProgress
+            value={Math.round(
+              (progressData.counter / progressData.total) * percentageConstant
+            )}
+            color="#775ef0"
+          >
             <CircularProgressLabel>
-              <b>02%</b>
+              <b>
+                {Math.round(
+                  (progressData.counter / progressData.total) *
+                    percentageConstant
+                )}
+                %
+              </b>
             </CircularProgressLabel>
           </CircularProgress>
         </Flex>
         <Flex direction="column">
-          <Text fontSize="24px" fontWeight="600" lineHeight="28px">
-            I think
+          <Text className="PercentageHeading">{progressData.heading}</Text>
+          <Text fontSize="sm" className="Percentage">
+            Question {progressData.counter}/{progressData.total}
           </Text>
-          <Text fontSize="sm">Question 1/16</Text>
         </Flex>
       </Flex>
       <div
@@ -52,23 +157,33 @@ const QuestionContainer: FC<Props> = ({data, handleNext, handlePrev}) => {
         }}
       ></div>
       <Flex className="HeadingContainer">
-        {data?.questionDescription !== '' && (
-          <Text className="HeadingQuestionDescription">
-            {data?.questionDescription}
-          </Text>
+        {data.preface !== '' && (
+          <Text className="HeadingQuestionDescription">{data.preface}</Text>
         )}
 
-        <Text className="HeadingQuestion">{data?.questionText}</Text>
+        <Text className="HeadingQuestion">{data.body}</Text>
       </Flex>
-      <Flex marginBottom="20px">
-        <Image src={dotsImage} />
-      </Flex>
-      <QuestionType type={data?.type} graphic={data?.graphic} />
+      <Suspense fallback={<Spinner />}>
+        <QuestionType
+          questionDetails={data.elements}
+          graphic={data.icon}
+          dimension={data.dimensions || ['', '']}
+          graphic1={data.icon1}
+          graphic2={data.icon2}
+        />
+      </Suspense>
       <Flex alignItems="center" justifyContent="center" userSelect="none">
         <Flex className="PreviousButton" onClick={handlePrev}>
           <Image width="40%" src={arrowIcon} className="LeftArrow" />
         </Flex>
-        <Flex className="NextButton" onClick={handleNext}>
+        <Flex
+          className={disabled ? 'NextButtonDisabled' : 'NextButton'}
+          onClick={(): void => {
+            if (!disabled) {
+              handleNext();
+            }
+          }}
+        >
           <Image width="40%" src={arrowIcon} className="RightArrow" />
         </Flex>
       </Flex>

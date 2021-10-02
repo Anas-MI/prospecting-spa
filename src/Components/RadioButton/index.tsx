@@ -1,40 +1,114 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable node/no-extraneous-import */
+/* eslint-disable no-use-before-define */
+
 import {Image} from '@chakra-ui/image';
 import {Box, Flex} from '@chakra-ui/layout';
 import {useContext, FC} from 'react';
 import './styles/styles.css';
 import {StateContext} from '../../Context';
 type Props = {
-  options?: string[];
-  graphic?: string;
+  options: string[][];
+  graphic: string;
+  dimension: string[];
 };
 
-const RadioButton: FC<Props> = ({options, graphic}) => {
+type TwoOptionsProps = {
+  options: string[];
+  graphic: string;
+  dimension: string[];
+};
+
+const FIRST_INDEX = 0;
+const SECOND_INDEX = 1;
+
+const RadioButton: FC<Props> = ({options, graphic, dimension}) => {
   const valueFromContext = useContext(StateContext);
   return (
-    <Box marginTop="30px" marginBottom="30px">
+    <Box marginTop="32px">
       <Flex
         position="relative"
         alignItems="center"
         direction="column"
         justifyContent="space-between"
       >
-        <Image src={graphic} />
+        <Image
+          src={graphic}
+          style={{
+            height: dimension[SECOND_INDEX],
+            width: dimension[FIRST_INDEX],
+          }}
+        />
         <Flex className="RadioButtonsContainer">
-          {options?.map((option, index) => {
+          {options.map((option: string[], index: number) => {
             return (
               <Flex
                 key={index}
                 className={
-                  valueFromContext?.answers[valueFromContext.counter] === option
+                  valueFromContext?.answers[valueFromContext.section][
+                    valueFromContext.counter
+                  ] === option[FIRST_INDEX]
                     ? 'RadioButtonSelected'
                     : 'RadioButton'
                 }
-                onClick={() => {
+                onClick={(): void => {
                   if (valueFromContext !== null) {
                     const tempAnswers = valueFromContext.answers;
-                    tempAnswers[valueFromContext.counter] = option;
+                    tempAnswers[valueFromContext.section][
+                      valueFromContext.counter
+                    ] = option[FIRST_INDEX];
+                    valueFromContext.setAnswers([...tempAnswers]);
+                  }
+                }}
+              >
+                {option[FIRST_INDEX]}
+              </Flex>
+            );
+          })}
+        </Flex>
+      </Flex>
+    </Box>
+  );
+};
+
+export const RadioButtonWithTwoOptions: FC<TwoOptionsProps> = ({
+  options,
+  graphic,
+  dimension,
+}) => {
+  const valueFromContext = useContext(StateContext);
+  return (
+    <Box marginTop="32px">
+      <Flex
+        position="relative"
+        alignItems="center"
+        direction="column"
+        justifyContent="space-between"
+      >
+        <Image
+          src={graphic}
+          style={{
+            height: dimension[SECOND_INDEX],
+            width: dimension[FIRST_INDEX],
+          }}
+        />
+        <Flex className="RadioButtonsContainer">
+          {options.map((option: string, index: number) => {
+            return (
+              <Flex
+                key={index}
+                className={
+                  valueFromContext?.answers[valueFromContext.section][
+                    valueFromContext.counter
+                  ] === option
+                    ? 'RadioButtonSelected'
+                    : 'RadioButton'
+                }
+                onClick={(): void => {
+                  if (valueFromContext !== null) {
+                    const tempAnswers = valueFromContext.answers;
+                    tempAnswers[valueFromContext.section][
+                      valueFromContext.counter
+                    ] = option;
                     valueFromContext.setAnswers([...tempAnswers]);
                   }
                 }}

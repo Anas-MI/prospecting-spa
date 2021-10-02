@@ -1,0 +1,68 @@
+.DarkAnnotation {
+  position: absolute;
+  background-color: #191c2c;
+  border-radius: 10px;
+  padding: 6px 23px;
+  left: 120px;
+  bottom: 100px;
+
+  font-family: Inter;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  user-select: none;
+  color: #ffffff;
+}
+
+.DarkAnnotation-side {
+  position: absolute;
+  right: 120px;
+  bottom: 80px;
+  background-color: #191c2c;
+  border-radius: 10px;
+  padding: 6px 23px;
+  color: white;
+  font-size: 24px;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 19px;
+  user-select: none;
+  color: #ffffff;
+}
+.AnnotationArrow {
+  position: absolute;
+  left: 130px;
+  bottom: 95px;
+
+  user-select: none;
+}
+.AnnotationArrow-side {
+  position: absolute;
+  right: 130px;
+  bottom: 95px;
+  user-select: none;
+}
+
+.SliderGuideText {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 18px;
+
+  color: #333333;
+}
+
+.NotationText {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+
+  /* C */
+  color: #191c2c;
+}

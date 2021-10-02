@@ -1,15 +1,15 @@
-import {StrictMode} from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Provider} from 'react-redux';
 
-import {Normalize} from 'styled-normalize';
+import configureStore from './Redux/createStore';
 
+const store = configureStore();
 ReactDOM.render(
-  <StrictMode>
-    <Normalize />
+  <Provider store={store}>
     <App />
-  </StrictMode>,
+  </Provider>,
   document.getElementById('root')
 );
 
